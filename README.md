@@ -1,4 +1,4 @@
-# vue3-jsoneditor
+# v3-jsoneditor
 
 > Vue 3 JSONEditor
 
@@ -7,7 +7,7 @@
 ## Installation
 
 ```bash
-npm install vue3-jsoneditor
+npm install v3-jsoneditor
 ```
 
 ## Using
@@ -17,7 +17,7 @@ npm install vue3-jsoneditor
 ```javascript
 import {createApp} from 'vue'
 import App from './App.vue'
-import Vue3Jsoneditor from 'Vue3Jsoneditor'
+import Vue3Jsoneditor from 'v3-jsoneditor/src/Vue3Jsoneditor.vue'
 
 const app = createApp(App)
 
@@ -30,7 +30,7 @@ app.mount('#app')
 ### Import
 
 ```javascript
-import Vue3Jsoneditor from 'vue3-jsoneditor'
+import Vue3Jsoneditor from 'v3-jsoneditor/src/Vue3Jsoneditor.vue'
 
 export default {
     name: 'app',

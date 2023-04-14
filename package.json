@@ -1,6 +1,6 @@
 {
-  "name": "vue3-jsoneditor",
-  "version": "0.0.1",
+  "name": "v3-jsoneditor",
+  "version": "0.0.2",
   "description": "Vue 3 JSONEditor",
   "repository": {
     "type": "git",
