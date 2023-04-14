@@ -2,11 +2,6 @@
   "name": "vue3-jsoneditor",
   "version": "0.0.1",
   "description": "Vue 3 JSONEditor",
-  "main": "dist/vue3-jsoneditor.umd.js",
-  "module": "dist/vue3-jsoneditor.esm.js",
-  "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pratik227/vue3-jsoneditor.git"
