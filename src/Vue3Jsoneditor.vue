@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :class="{ 'full-screen-container': isFullScreen }">
+  <div class="container" :class="{ 'full-screen-container': isFullScreen }" :style="getHeight">
     <div ref="jsonEditorVue" class="json-editor-vue"/>
     <div
         class="full-screen"
@@ -8,6 +8,7 @@
         right: !hasLogo,
       }"
         @click="toggleFullScreen"
+      v-if="currentMode === 'code' && plus"
     />
   </div>
 </template>
@@ -34,6 +35,13 @@ export default {
     language: {
       type: String,
       default: "en",
+    },
+    height: {
+      type: String,
+    },
+    plus: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -149,6 +157,16 @@ export default {
     },
     setEditorContent(value) {
       this.editor?.set(value);
+    },
+  },
+  computed: {
+    getHeight() {
+      if (this.height && !this.max) {
+        return {
+          height: this.height,
+        };
+      }
+      return {};
     },
   },
 };

@@ -1,8 +1,10 @@
 # v3-jsoneditor
 
-> "Vue 3 JSON Editor" is a web-based application built with the Vue 3 JavaScript framework that allows users to easily create, view, and edit JSON data in a user-friendly interface. With its intuitive drag-and-drop functionality and syntax highlighting, this editor simplifies the process of working with JSON data.
+> "Vue 3 JSON Editor" is a web-based application built with the Vue 3 JavaScript framework that allows users to easily create, view, and edit JSON data in a user-friendly interface.
 
 ## Try the demo
+
+https://v3-jsoneditor.netlify.app/
 
 ## Installation
 
@@ -44,12 +46,11 @@ export default {
             }
         }
     },
-    methods: {
-        onError() {
-            console.log('error')
-        }
-    }
 }
+```
+
+```html
+<Vue3Jsoneditor ref="editor" v-model="json" :options="options"></Vue3Jsoneditor>
 ```
 
 ### Options
@@ -58,11 +59,27 @@ export default {
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: | :--------------: |
 | options       | Jsoneditor params, You can look at the detailed  [configuration](https://github.com/josdejong/jsoneditor/blob/master/docs/api.md#configuration-options?blank) | Object  | { mode: 'code' } |
 | v-model | Object value                                                                                                                                                  | Object  | { }              |
-| plus          | Whether full screen switching is added                                                                                                                        | Boolean | true             |
+| currentMode          | current edit mode	                                                                                                                       | String | code             |
 | height        | Default height                                                                                                                                                | String  | -                |
 
 ### Events
 
-| Name  | Description    |
-| ----- | -------------- |
-| error | Error callback |
+| Name  | Description                  |
+| ----- |------------------------------|
+| change | called on json update        |
+| update:modelValue	 | Called on model value update |
+
+
+# Support
+
+If this helped you in any way, you can contribute to this project for long term survival by supporting me
+
+### [💜 Support my open-source work on GitHub](https://github.com/sponsors/pratik227)
+
+Be sure to check out my sponsor page.
+
+Thank you so much!!!
+
+# License
+
+MIT

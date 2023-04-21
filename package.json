@@ -1,6 +1,6 @@
 {
   "name": "v3-jsoneditor",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Vue 3 JSONEditor",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "json editor",
     "component"
   ],
-  "author": "Pratik Patel",
+  "author": "pratikpatelpp802@gmail.com",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pratik227/vue3-jsoneditor.git/issues"
@@ -23,6 +23,10 @@
   "homepage": "https://v3-jsoneditor.netlify.app/",
   "dependencies": {
     "jsoneditor": "^9.10.0"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/pratik227"
   },
   "devDependencies": {
   }
