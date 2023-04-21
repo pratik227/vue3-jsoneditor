@@ -110,6 +110,7 @@ export default {
           const json = this.editor.get();
           setJson(json);
         } catch (error) {
+          this.$emit("error", error)
         }
       };
       const onModeChange = () => {

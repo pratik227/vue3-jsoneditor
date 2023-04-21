@@ -64,10 +64,11 @@ export default {
 
 ### Events
 
-| Name  | Description                  |
-| ----- |------------------------------|
-| change | called on json update        |
+| Name               | Description                  |
+|--------------------|------------------------------|
+| change             | called on json update        |
 | update:modelValue	 | Called on model value update |
+| error	             | Error callback |
 
 
 # Support
