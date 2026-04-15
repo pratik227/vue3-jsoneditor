@@ -5,7 +5,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 const ASSET_PATH = process.env.ASSET_PATH || './dist/';
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: ASSET_PATH,
@@ -48,7 +48,7 @@ module.exports = {
       'vue$': 'vue/dist/vue.esm-bundler.js',
       '@': path.resolve(__dirname, 'src'),
     },
-    extensions: ['*', '.js', '.vue', '.json']
+    extensions: ['.js', '.vue', '.json']
   },
   plugins: [
     new VueLoaderPlugin(),
@@ -61,33 +61,13 @@ module.exports = {
   ],
   devServer: {
     historyApiFallback: true,
-    noInfo: true,
-    overlay: true
   },
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: 'eval-source-map'
 };
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
-  // http://vue-loader.vuejs.org/en/workflow/production.html
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"',
-        ASSET_PATH: JSON.stringify(ASSET_PATH)
-      } 
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
-  ])
+  module.exports.devtool = 'source-map'
 }

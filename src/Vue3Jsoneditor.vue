@@ -1,176 +1,168 @@
 <template>
-  <div class="container" :class="{ 'full-screen-container': isFullScreen }" :style="getHeight">
-    <div ref="jsonEditorVue" class="json-editor-vue"/>
+  <div class="container" :class="{ 'full-screen-container': isFullScreen }" :style="containerStyle">
+    <div ref="editorRef" class="json-editor-vue" />
     <div
-        class="full-screen"
-        :class="{
+      v-if="currentMode === 'code' && plus"
+      class="full-screen"
+      :class="{
         show: showFullScreen,
         right: !hasLogo,
       }"
-        @click="toggleFullScreen"
-      v-if="currentMode === 'code' && plus"
+      @click="toggleFullScreen"
     />
   </div>
 </template>
 
 <script>
+export default {
+  name: "Vue3Jsoneditor",
+};
+</script>
+
+<script setup>
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from "vue";
 import JsonEditor from "jsoneditor";
 import "jsoneditor/dist/jsoneditor.min.css";
 
-export default {
-  editor: null,
-  name: "Vue3Jsoneditor",
-  internalChange: false,
-  props: {
-    modelValue: Object,
-    options: Object,
-    currentMode: {
-      type: String,
-      default: "code",
-    },
-    modeList: {
-      type: Array,
-      default: () => ["tree", "code", "form", "text", "view"],
-    },
-    language: {
-      type: String,
-      default: "en",
-    },
-    height: {
-      type: String,
-    },
-    plus: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  data() {
-    return {
-      json: this.modelValue,
-      expandedModes: ["tree", "view", "form"],
-      isFullScreen: false,
-      hasLogo: true,
-      showFullScreen: false,
-    };
-  },
-  watch: {
-    modelValue: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        if (!this.internalChange) {
-          this.setEditorContent(val);
-          this.$nextTick(() => {
-            this.expandAll();
-          });
-        }
-      },
-    },
-  },
-  mounted() {
-    this.init();
-    const logo = document.querySelector(
-        ".jsoneditor-menu .jsoneditor-poweredBy"
-    );
-    this.hasLogo = logo && window.getComputedStyle(logo).display !== "none";
-    this.showFullScreen = true;
-  },
-  unmounted() {
-    this.editor?.destroy();
-    this.editor = null;
-  },
-  methods: {
-    toggleFullScreen() {
-      this.isFullScreen = !this.isFullScreen;
-      this.$nextTick(() => {
-        const event = new Event("resize");
-        window.dispatchEvent(event);
-      });
-    },
-    init() {
-      const {currentMode, modeList, options} = this;
-      const onChange = () => {
-        const setJson = (json) => {
-          this.json = json;
-          this.$emit("update:modelValue", json);
-          this.$emit("change", json);
-          this.internalChange = true;
-          this.$nextTick(() => {
-            this.internalChange = false;
-          });
-        };
+const EXPANDED_MODES = ["tree", "view", "form"];
 
-        const text = this.editor.getText();
+const props = defineProps({
+  modelValue: Object,
+  options: Object,
+  currentMode: {
+    type: String,
+    default: "code",
+  },
+  modeList: {
+    type: Array,
+    default: () => ["tree", "code", "form", "text", "view"],
+  },
+  language: {
+    type: String,
+    default: "en",
+  },
+  height: {
+    type: String,
+  },
+  plus: {
+    type: Boolean,
+    default: true,
+  },
+});
+
+const emit = defineEmits([
+  "update:modelValue",
+  "change",
+  "error",
+  "textSelectionChange",
+  "selectionChange",
+  "colorPicker",
+  "focus",
+  "blur",
+]);
+
+const editorRef = ref(null);
+let editor = null;
+let internalChange = false;
+
+const isFullScreen = ref(false);
+const hasLogo = ref(true);
+const showFullScreen = ref(false);
+
+const containerStyle = computed(() => {
+  if (props.height) {
+    return { height: props.height };
+  }
+  return {};
+});
+
+function expandAll() {
+  if (EXPANDED_MODES.includes(editor?.getMode())) {
+    editor?.expandAll();
+  }
+}
+
+function setEditorContent(value) {
+  editor?.set(value);
+}
+
+function toggleFullScreen() {
+  isFullScreen.value = !isFullScreen.value;
+  nextTick(() => {
+    window.dispatchEvent(new Event("resize"));
+  });
+}
+
+function updateJson(json) {
+  emit("update:modelValue", json);
+  emit("change", json);
+  internalChange = true;
+  nextTick(() => {
+    internalChange = false;
+  });
+}
+
+function init() {
+  editor = new JsonEditor(
+    editorRef.value,
+    {
+      ...props.options,
+      indentation: 2,
+      language: props.language,
+      mode: props.currentMode,
+      modes: props.modeList,
+      onChange() {
+        const text = editor.getText();
         if (!text) {
-          setJson({});
+          updateJson({});
           return;
         }
-
         try {
-          const json = this.editor.get();
-          setJson(json);
+          updateJson(editor.get());
         } catch (error) {
-          this.$emit("error", error)
+          emit("error", error);
         }
-      };
-      const onModeChange = () => {
-        this.expandAll();
-      };
-      const onTextSelectionChange = (start, end, text) => {
-        this.$emit("textSelectionChange", this.editor, start, end, text);
-      };
-      const onSelectionChange = (start, end) => {
-        this.$emit("selectionChange", this.editor, start, end);
-      };
-      const onColorPicker = (parent, color, onChange) => {
-        this.$emit("colorPicker", this.editor, parent, color, onChange);
-      };
-      const onFocus = ({target}) => {
-        this.$emit("focus", this.editor, target);
-      };
-      const onBlur = async ({target}) => {
-        this.$emit("blur", this.editor, target);
-      };
-      const finalOptions = {
-        ...options,
-        indentation: 2,
-        language: this.language,
-        mode: currentMode,
-        modes: modeList,
-        onChange,
-        onModeChange,
-        onTextSelectionChange,
-        onSelectionChange,
-        onColorPicker,
-        onFocus,
-        onBlur,
-      };
-      this.editor = new JsonEditor(
-          this.$refs.jsonEditorVue,
-          finalOptions,
-          this.json
-      );
+      },
+      onModeChange: () => expandAll(),
+      onTextSelectionChange: (start, end, text) =>
+        emit("textSelectionChange", editor, start, end, text),
+      onSelectionChange: (start, end) =>
+        emit("selectionChange", editor, start, end),
+      onColorPicker: (parent, color, onChange) =>
+        emit("colorPicker", editor, parent, color, onChange),
+      onFocus: ({ target }) => emit("focus", editor, target),
+      onBlur: ({ target }) => emit("blur", editor, target),
     },
-    expandAll() {
-      if (this.expandedModes.includes(this.editor?.getMode())) {
-        this.editor?.expandAll();
-      }
-    },
-    setEditorContent(value) {
-      this.editor?.set(value);
-    },
+    props.modelValue
+  );
+}
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (!internalChange) {
+      setEditorContent(val);
+      nextTick(() => expandAll());
+    }
   },
-  computed: {
-    getHeight() {
-      if (this.height && !this.max) {
-        return {
-          height: this.height,
-        };
-      }
-      return {};
-    },
-  },
-};
+  { deep: true }
+);
+
+onMounted(() => {
+  init();
+  const logo = document.querySelector(
+    ".jsoneditor-menu .jsoneditor-poweredBy"
+  );
+  hasLogo.value = logo && window.getComputedStyle(logo).display !== "none";
+  showFullScreen.value = true;
+});
+
+onUnmounted(() => {
+  editor?.destroy();
+  editor = null;
+});
+
+defineExpose({ expandAll, setEditorContent, toggleFullScreen });
 </script>
 
 <style scoped>
