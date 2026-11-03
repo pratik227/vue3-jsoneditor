@@ -1,11 +1,20 @@
 import Vue3Jsoneditor from './src/Vue3Jsoneditor.vue';
+import { CONFIG_KEY } from './src/config.js';
 
-export default Vue3Jsoneditor;
-
-export const install = (app) => {
-    app.component(Vue3Jsoneditor.name, Vue3Jsoneditor);
-};
-
-if (typeof window !== 'undefined' && window.Vue) {
-    install(window.Vue);
+/**
+ * Vue plugin: registers the component globally and sets global defaults.
+ *
+ *   app.use(Vue3Jsoneditor, { componentName: 'JsonEditor', theme: 'auto', options: {} })
+ *
+ * Every key except `componentName` is used as a default for the prop with the same name.
+ */
+export function install(app, config = {}) {
+    const { componentName = 'Vue3Jsoneditor', ...defaults } = config || {};
+    app.provide(CONFIG_KEY, defaults);
+    app.component(componentName, Vue3Jsoneditor);
 }
+
+Vue3Jsoneditor.install = install;
+
+export { Vue3Jsoneditor, CONFIG_KEY };
+export default Vue3Jsoneditor;

@@ -1,0 +1,21 @@
+{
+  "name": "v3-jsoneditor-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "@iconify-json/solar": "^1.2.2",
+    "@iconify/utils": "^2.3.0",
+    "jsoneditor": "^10.4.3",
+    "shiki": "^2.5.0",
+    "unocss": "^66.5.0",
+    "vitepress": "1.6.4",
+    "vitepress-plugin-group-icons": "^1.6.0",
+    "vitepress-plugin-llms": "^1.14.0",
+    "vue": "^3.5.22"
+  }
+}

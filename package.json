@@ -1,11 +1,42 @@
 {
   "name": "v3-jsoneditor",
-  "version": "0.0.7",
-  "description": "Vue 3 JSONEditor",
-  "main": "index.js",
-  "module": "index.js",
+  "version": "0.1.0",
+  "description": "Vue 3 JSON editor component — a modern, themeable wrapper around jsoneditor with v-model, dark mode, fullscreen and TypeScript types.",
+  "type": "module",
+  "main": "./dist/v3-jsoneditor.umd.cjs",
+  "module": "./dist/v3-jsoneditor.js",
+  "types": "./index.d.ts",
+  "unpkg": "./dist/v3-jsoneditor.umd.cjs",
+  "jsdelivr": "./dist/v3-jsoneditor.umd.cjs",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./dist/v3-jsoneditor.js",
+      "require": "./dist/v3-jsoneditor.umd.cjs"
+    },
+    "./style.css": "./dist/style.css",
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "index.js",
+    "index.d.ts",
+    "llms.txt",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
-    "build": "webpack --mode production"
+    "dev": "vite playground",
+    "build": "vite build",
+    "docs:dev": "npm --prefix docs run dev",
+    "docs:build": "npm --prefix docs run build",
+    "docs:preview": "npm --prefix docs run preview"
   },
   "repository": {
     "type": "git",
@@ -18,30 +49,34 @@
     "json",
     "editor",
     "json editor",
-    "component"
+    "component",
+    "jsoneditor",
+    "json-editor",
+    "vue-component",
+    "json schema",
+    "dark mode",
+    "nuxt"
   ],
   "author": "pratikpatelpp802@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pratik227/vue3-jsoneditor.git/issues"
+    "url": "https://github.com/pratik227/vue3-jsoneditor/issues"
   },
   "homepage": "https://v3-jsoneditor.netlify.app/",
-  "dependencies": {
-    "jsoneditor": "^9.10.0"
-  },
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/pratik227"
   },
+  "dependencies": {
+    "jsoneditor": "^10.4.3"
+  },
+  "peerDependencies": {
+    "vue": ">=3.3.0"
+  },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@vue/compiler-sfc": "^3.5.32",
-    "babel-loader": "^10.1.1",
-    "css-loader": "^7.1.4",
-    "vue": "^3.5.32",
-    "vue-loader": "^17.4.2",
-    "vue-style-loader": "^4.1.3",
-    "webpack": "^5.106.2",
-    "webpack-cli": "^7.0.2"
+    "@vitejs/plugin-vue": "^6.0.10",
+    "vite": "^7.3.7",
+    "vite-plugin-lib-inject-css": "^2.2.2",
+    "vue": "^3.5.32"
   }
 }
