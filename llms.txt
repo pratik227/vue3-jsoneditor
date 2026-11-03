@@ -1,0 +1,32 @@
+# v3-jsoneditor
+
+> Vue 3 JSON editor component wrapping jsoneditor v10. It offers v-model (any JSON), tree/code/form/text/view modes, light/dark/auto/classic themes via --vje-* CSS variables, accessible full screen, JSON Schema validation, SSR-safe loading and TypeScript types.
+
+Install: `npm install v3-jsoneditor`
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import Vue3Jsoneditor from 'v3-jsoneditor'
+const json = ref({ hello: 'vue' })
+</script>
+<template>
+  <Vue3Jsoneditor v-model="json" v-model:currentMode="mode" theme="auto" height="400px" :options="{ schema }" />
+</template>
+```
+
+Key facts:
+- Props: modelValue, text, options, currentMode ('code'), modeList, theme ('light'), height ('400px'), plus (true), fullscreen, readOnly, debounce, language ('en'), indentation (2), mainMenuBar, navigationBar, statusBar.
+- Events: update:modelValue, update:text, update:currentMode, update:fullscreen, change, error, validation-error, mode-change, fullscreen-change, focus, blur, textSelectionChange, selectionChange, colorPicker.
+- Ref methods: getEditor(), get(), getText(), validate(), focus(), setEditorContent(json), expandAll(), collapseAll(), toggleFullScreen().
+- Slots: #toolbar="{ editor, mode }", default (placeholder before mount).
+- Global defaults: app.use(Vue3Jsoneditor, { componentName, theme, height, options, ... }).
+- `options` is passed to jsoneditor. Your callbacks run in addition to the component's.
+
+## Docs
+- [Full documentation for LLMs](https://v3-jsoneditor.netlify.app/llms-full.txt)
+- [Docs index for LLMs](https://v3-jsoneditor.netlify.app/llms.txt)
+- [Getting started](https://v3-jsoneditor.netlify.app/guide/getting-started.md)
+- [Props](https://v3-jsoneditor.netlify.app/api/props.md)
+- [Events](https://v3-jsoneditor.netlify.app/api/events.md)
+- [Methods](https://v3-jsoneditor.netlify.app/api/methods.md)

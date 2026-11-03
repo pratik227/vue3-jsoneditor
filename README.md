@@ -1,10 +1,11 @@
 # v3-jsoneditor
 
-> "Vue 3 JSON Editor" is a web-based application built with the Vue 3 JavaScript framework that allows users to easily create, view, and edit JSON data in a user-friendly interface.
+> A modern, themeable JSON editor component for Vue 3: a wrapper around [jsoneditor](https://github.com/josdejong/jsoneditor) with `v-model`, five editing modes, light/dark themes, accessible full screen, JSON Schema validation, SSR safety and TypeScript types.
 
-## Try the demo
+[![npm](https://img.shields.io/npm/v/v3-jsoneditor)](https://www.npmjs.com/package/v3-jsoneditor) [![license](https://img.shields.io/npm/l/v3-jsoneditor)](./LICENSE)
 
-https://v3-jsoneditor.netlify.app/
+**Docs and live playground:** https://v3-jsoneditor.netlify.app/
+**For AI tools:** [`/llms.txt`](https://v3-jsoneditor.netlify.app/llms.txt) · [`/llms-full.txt`](https://v3-jsoneditor.netlify.app/llms-full.txt)
 
 ## Installation
 
@@ -12,75 +13,104 @@ https://v3-jsoneditor.netlify.app/
 npm install v3-jsoneditor
 ```
 
-## Using
+## Usage
 
-### Import globally
+```vue
+<script setup>
+import { ref } from 'vue'
+import Vue3Jsoneditor from 'v3-jsoneditor'
 
-```javascript
-import {createApp} from 'vue'
-import App from './App.vue'
-import Vue3Jsoneditor from 'v3-jsoneditor/src/Vue3Jsoneditor.vue'
+const json = ref({ hello: 'vue' })
+</script>
 
-const app = createApp(App)
-
-// Register the VJsoneditor component globally
-app.component('vue3-jsoneditor', Vue3Jsoneditor)
-
-app.mount('#app')
+<template>
+  <Vue3Jsoneditor v-model="json" height="400px" theme="auto" />
+</template>
 ```
 
-### Import
+Styles are injected automatically. For CDN or strict-CSP setups, `v3-jsoneditor/style.css` is also published.
 
-```javascript
-import Vue3Jsoneditor from 'v3-jsoneditor/src/Vue3Jsoneditor.vue'
+### Register globally (with defaults)
 
-export default {
-    name: 'app',
-    components: {
-        Vue3Jsoneditor
-    },
-    data() {
-        return {
-            json: {
-                "hello": "vue"
-            }
-        }
-    },
+```js
+import { createApp } from 'vue'
+import Vue3Jsoneditor from 'v3-jsoneditor'
+import App from './App.vue'
+
+createApp(App)
+  .use(Vue3Jsoneditor, { theme: 'auto', height: 500 }) // optional global defaults
+  .mount('#app')
+```
+
+### CDN
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/v3-jsoneditor/dist/style.css" />
+<script src="https://unpkg.com/vue@3"></script>
+<script src="https://unpkg.com/jsoneditor@10/dist/jsoneditor.min.js"></script>
+<script src="https://unpkg.com/v3-jsoneditor"></script>
+<script>
+  Vue.createApp({ data: () => ({ json: { hello: 'vue' } }) })
+    .use(Vue3Jsoneditor.default)
+    .mount('#app')
+</script>
+```
+
+## Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `v-model` / `modelValue` | any JSON | – | Bound JSON value. Clearing the editor emits `null`. |
+| `v-model:text` / `text` | `string` | – | Raw editor text (may be invalid JSON while typing). |
+| `options` | `object` | `{}` | Any [jsoneditor option](https://github.com/josdejong/jsoneditor/blob/master/docs/api.md#configuration-options). Your callbacks run in addition to the component's. |
+| `v-model:currentMode` / `currentMode` | `'tree' \| 'code' \| 'form' \| 'text' \| 'view'` | `'code'` | Active mode. |
+| `modeList` | `string[]` | all five | Modes offered in the switcher. |
+| `theme` | `'light' \| 'dark' \| 'auto' \| 'classic'` | `'light'` | `auto` follows `<html class="dark">` or the OS. `classic` is the original look. |
+| `height` | `string \| number` | `'400px'` | Numbers are pixels. |
+| `plus` | `boolean` | `true` | Show the full screen button. |
+| `v-model:fullscreen` / `fullscreen` | `boolean` | `false` | Full screen state. Esc exits. |
+| `readOnly` | `boolean` | `false` | Read-only in every mode. |
+| `debounce` | `number` | `0` | Debounce (ms) for model updates. |
+| `language` | `string` | `'en'` | `en`, `zh-CN`, `pt-BR`, `tr`, `ja`, `fr-FR`, `de`, `ru`, `es`. |
+| `indentation` | `number` | `2` | Spaces per indent level. |
+| `mainMenuBar` / `navigationBar` / `statusBar` | `boolean` | `true` | Toggle editor chrome. |
+
+## Events
+
+`update:modelValue`, `update:text`, `update:currentMode`, `update:fullscreen`, `change`, `error` (invalid JSON), `validation-error`, `mode-change`, `fullscreen-change`, `focus`, `blur`, `textSelectionChange`, `selectionChange`, `colorPicker`.
+
+## Methods (template ref)
+
+`getEditor()`, `get()`, `getText()`, `validate()`, `focus()`, `setEditorContent(json)`, `expandAll()`, `collapseAll()`, `toggleFullScreen()`.
+
+## Slots
+
+- `#toolbar="{ editor, mode }"`: extra buttons inside the menu bar.
+- default: placeholder shown until the editor has mounted.
+
+## Theming
+
+```css
+.my-editor.v3-jsoneditor {
+  --vje-accent: #10b981;
+  --vje-radius: 14px;
 }
 ```
 
-```html
-<Vue3Jsoneditor ref="editor" v-model="json" :options="options"></Vue3Jsoneditor>
+See the [theming guide](https://v3-jsoneditor.netlify.app/guide/theming) for every variable.
+
+## Development
+
+```bash
+npm install
+npm run build          # library -> dist/
+npm run docs:dev       # docs site (run `npm install` in docs/ first)
 ```
 
-### Options
+## Support
 
-| Name          | Description                                                                                                                                                   | type    | default          |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: | :--------------: |
-| options       | Jsoneditor params, You can look at the detailed  [configuration](https://github.com/josdejong/jsoneditor/blob/master/docs/api.md#configuration-options?blank) | Object  | { mode: 'code' } |
-| v-model | Object value                                                                                                                                                  | Object  | { }              |
-| currentMode          | current edit mode	                                                                                                                       | String | code             |
-| height        | Default height                                                                                                                                                | String  | -                |
+If this helped you, consider [sponsoring the project on GitHub](https://github.com/sponsors/pratik227). Thank you!
 
-### Events
+## License
 
-| Name               | Description                  |
-|--------------------|------------------------------|
-| change             | called on json update        |
-| update:modelValue	 | Called on model value update |
-| error	             | Error callback |
-
-
-# Support
-
-If this helped you in any way, you can contribute to this project for long term survival by supporting me
-
-### [💜 Support my open-source work on GitHub](https://github.com/sponsors/pratik227)
-
-Be sure to check out my sponsor page.
-
-Thank you so much!!!
-
-# License
-
-MIT
+MIT © Pratik Patel. Toolbar icons from the [Solar icon set](https://icon-sets.iconify.design/solar/) (CC BY 4.0).
