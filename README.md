@@ -2,7 +2,7 @@
 
 > A modern, themeable JSON editor component for Vue 3: a wrapper around [jsoneditor](https://github.com/josdejong/jsoneditor) with `v-model`, five editing modes, light/dark themes, accessible full screen, JSON Schema validation, SSR safety and TypeScript types.
 
-[![npm](https://img.shields.io/npm/v/v3-jsoneditor)](https://www.npmjs.com/package/v3-jsoneditor) [![license](https://img.shields.io/npm/l/v3-jsoneditor)](./LICENSE)
+[![npm](https://img.shields.io/npm/v/v3-jsoneditor)](https://www.npmjs.com/package/v3-jsoneditor) [![npm downloads](https://img.shields.io/npm/dt/v3-jsoneditor.svg)](https://www.npmjs.com/package/v3-jsoneditor) [![license](https://img.shields.io/npm/l/v3-jsoneditor)](./LICENSE)
 
 **Docs and live playground:** https://v3-jsoneditor.netlify.app/
 **For AI tools:** [`/llms.txt`](https://v3-jsoneditor.netlify.app/llms.txt) · [`/llms-full.txt`](https://v3-jsoneditor.netlify.app/llms-full.txt)
